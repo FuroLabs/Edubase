@@ -69,12 +69,59 @@ const MOCK_REGISTRY: Registry = {
                         },
                     ],
                 },
-                {
-                    id: "science",
-                    name: "Science",
-                    medium: "sinhala",
-                    resources: []
-                }
+                { id: "science", name: "Science", medium: "sinhala", resources: [] },
+                { id: "sinhala", name: "Sinhala", medium: "sinhala", resources: [] },
+                { id: "english", name: "English", medium: "english", resources: [] },
+                { id: "history", name: "History", medium: "sinhala", resources: [] },
+                { id: "buddhism", name: "Buddhism", medium: "sinhala", resources: [] },
+            ],
+        },
+        {
+            id: "grade-7",
+            name: "Grade 7",
+            subjects: [
+                { id: "mathematics", name: "Mathematics", medium: "sinhala", resources: [] },
+                { id: "science", name: "Science", medium: "sinhala", resources: [] },
+                { id: "sinhala", name: "Sinhala", medium: "sinhala", resources: [] },
+                { id: "english", name: "English", medium: "english", resources: [] },
+                { id: "history", name: "History", medium: "sinhala", resources: [] },
+                { id: "buddhism", name: "Buddhism", medium: "sinhala", resources: [] },
+            ],
+        },
+        {
+            id: "grade-8",
+            name: "Grade 8",
+            subjects: [
+                { id: "mathematics", name: "Mathematics", medium: "sinhala", resources: [] },
+                { id: "science", name: "Science", medium: "sinhala", resources: [] },
+                { id: "sinhala", name: "Sinhala", medium: "sinhala", resources: [] },
+                { id: "english", name: "English", medium: "english", resources: [] },
+                { id: "history", name: "History", medium: "sinhala", resources: [] },
+                { id: "buddhism", name: "Buddhism", medium: "sinhala", resources: [] },
+            ],
+        },
+        {
+            id: "grade-9",
+            name: "Grade 9",
+            subjects: [
+                { id: "mathematics", name: "Mathematics", medium: "sinhala", resources: [] },
+                { id: "science", name: "Science", medium: "sinhala", resources: [] },
+                { id: "sinhala", name: "Sinhala", medium: "sinhala", resources: [] },
+                { id: "english", name: "English", medium: "english", resources: [] },
+                { id: "history", name: "History", medium: "sinhala", resources: [] },
+                { id: "buddhism", name: "Buddhism", medium: "sinhala", resources: [] },
+            ],
+        },
+        {
+            id: "grade-10",
+            name: "Grade 10",
+            subjects: [
+                { id: "mathematics", name: "Mathematics", medium: "sinhala", resources: [] },
+                { id: "science", name: "Science", medium: "sinhala", resources: [] },
+                { id: "sinhala", name: "Sinhala", medium: "sinhala", resources: [] },
+                { id: "english", name: "English", medium: "english", resources: [] },
+                { id: "history", name: "History", medium: "sinhala", resources: [] },
+                { id: "buddhism", name: "Buddhism", medium: "sinhala", resources: [] },
             ],
         },
         {
@@ -95,8 +142,13 @@ const MOCK_REGISTRY: Registry = {
                             size: "2MB"
                         }
                     ]
-                }
-            ]
+                },
+                { id: "science", name: "Science", medium: "sinhala", resources: [] },
+                { id: "sinhala", name: "Sinhala", medium: "sinhala", resources: [] },
+                { id: "english", name: "English", medium: "english", resources: [] },
+                { id: "history", name: "History", medium: "sinhala", resources: [] },
+                { id: "buddhism", name: "Buddhism", medium: "sinhala", resources: [] },
+            ],
         }
     ],
     exams: [
@@ -137,16 +189,16 @@ export const getRegistry = unstable_cache(
             // In production, we would rely on the fetch.
             // To test "Git CMS", we try fetch, catch, and return mock.
 
-            try {
-                const res = await fetch(REGISTRY_URL, {
-                    next: { revalidate: 3600 },
-                });
-                if (res.ok) {
-                    return (await res.json()) as Registry;
-                }
-            } catch (e) {
-                // Ignore fetch error
-            }
+            // try {
+            //     const res = await fetch(REGISTRY_URL, {
+            //         next: { revalidate: 3600 },
+            //     });
+            //     if (res.ok) {
+            //         return (await res.json()) as Registry;
+            //     }
+            // } catch (e) {
+            //     // Ignore fetch error
+            // }
 
             // Fallback to mock data
             return MOCK_REGISTRY;
