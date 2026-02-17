@@ -1,5 +1,5 @@
 import { getGradeData } from "@/lib/content-service";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Book, ChevronRight } from "lucide-react";
@@ -11,6 +11,11 @@ export default async function GradePage({
     params: Promise<{ grade: string }>;
 }) {
     const { grade } = await params;
+
+    if (grade === "grade-12" || grade === "grade-13") {
+        redirect("/al");
+    }
+
     const data = await getGradeData(grade);
 
     if (!data) {
