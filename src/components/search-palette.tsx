@@ -9,10 +9,15 @@ import {
     CommandItem,
     CommandList,
 } from "@/components/ui/command";
-import { Search } from "lucide-react";
+import { Search, Book, FileText, GraduationCap } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Registry } from "@/lib/content-service";
 
-export function SearchPalette() {
+interface SearchPaletteProps {
+    registry: Registry | null;
+}
+
+export function SearchPalette({ registry }: SearchPaletteProps) {
     const [open, setOpen] = React.useState(false);
     const router = useRouter();
 
@@ -32,6 +37,8 @@ export function SearchPalette() {
         command();
     }, []);
 
+    if (!registry) return null;
+
     return (
         <>
             <button
@@ -48,29 +55,79 @@ export function SearchPalette() {
                 </kbd>
             </button>
             <CommandDialog open={open} onOpenChange={setOpen}>
-                <CommandInput placeholder="Type a command or search..." />
+                <CommandInput placeholder="Type to search grades, subjects, or resources..." />
                 <CommandList>
                     <CommandEmpty>No results found.</CommandEmpty>
+
                     <CommandGroup heading="Grades">
-                        {Array.from({ length: 8 }, (_, i) => i + 6).map((grade) => (
+                        {registry.grades.map((grade) => (
                             <CommandItem
-                                key={grade}
-                                onSelect={() => runCommand(() => router.push(`/library/grade-${grade}`))}
+                                key={grade.id}
+                                value={grade.name}
+                                onSelect={() => runCommand(() => router.push(`/library/${grade.id}`))}
                             >
-                                Grade {grade}
+                                <GraduationCap className="mr-2 h-4 w-4" />
+                                {grade.name}
                             </CommandItem>
                         ))}
                     </CommandGroup>
+
+                    <CommandGroup heading="Subjects">
+                        {registry.grades.flatMap(grade =>
+                            grade.subjects.map(subject => ({
+                                ...subject,
+                                gradeId: grade.id,
+                                gradeName: grade.name
+                            }))
+                        ).map((subject, idx) => (
+                            <CommandItem
+                                key={`${subject.gradeId}-${subject.id}-${idx}`}
+                                value={`${subject.name} ${subject.gradeName} ${subject.medium}`}
+                                onSelect={() => runCommand(() => router.push(`/library/${subject.gradeId}/${subject.id}`))}
+                            >
+                                <Book className="mr-2 h-4 w-4" />
+                                {subject.name} ({subject.gradeName}) - {subject.medium}
+                            </CommandItem>
+                        ))}
+                    </CommandGroup>
+
+                    <CommandGroup heading="Resources">
+                        {registry.grades.flatMap(grade =>
+                            grade.subjects.flatMap(subject =>
+                                subject.resources.map(resource => ({
+                                    ...resource,
+                                    gradeId: grade.id,
+                                    subjectId: subject.id,
+                                    subjectName: subject.name,
+                                    gradeName: grade.name
+                                }))
+                            )
+                        ).map((resource, idx) => (
+                            <CommandItem
+                                key={`${resource.id}-${idx}`}
+                                value={`${resource.title} ${resource.subjectName} ${resource.gradeName}`}
+                                onSelect={() => runCommand(() => window.open(resource.url, '_blank'))}
+                            >
+                                <FileText className="mr-2 h-4 w-4" />
+                                {resource.title}
+                                <span className="ml-2 text-xs text-muted-foreground">
+                                    {resource.subjectName} • {resource.gradeName}
+                                </span>
+                            </CommandItem>
+                        ))}
+                    </CommandGroup>
+
                     <CommandGroup heading="Exams">
-                        <CommandItem onSelect={() => runCommand(() => router.push("/exams/ol"))}>
-                            Ordinary Level (O/L)
-                        </CommandItem>
-                        <CommandItem onSelect={() => runCommand(() => router.push("/exams/al"))}>
-                            Advanced Level (A/L)
-                        </CommandItem>
-                        <CommandItem onSelect={() => runCommand(() => router.push("/exams/schol"))}>
-                            Grade 5 Scholarship
-                        </CommandItem>
+                        {registry.exams.map((exam) => (
+                            <CommandItem
+                                key={exam.id}
+                                value={`${exam.type.toUpperCase()} ${exam.year}`}
+                                onSelect={() => runCommand(() => router.push(`/exams/${exam.type}/${exam.year}`))}
+                            >
+                                <FileText className="mr-2 h-4 w-4" />
+                                {exam.type.toUpperCase()} - {exam.year}
+                            </CommandItem>
+                        ))}
                     </CommandGroup>
                 </CommandList>
             </CommandDialog>

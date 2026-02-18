@@ -1,10 +1,9 @@
 import { getGradeData } from "@/lib/content-service";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Download, FileText, ArrowLeft } from "lucide-react";
-import { PDFViewer } from "@/components/ui/pdf-viewer";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { ResourceCard } from "@/components/resource-card";
 
 export default async function SubjectPage({
     params,
@@ -20,13 +19,30 @@ export default async function SubjectPage({
 
     if (!subject) notFound();
 
-    // Group resources by type
-    const textbooks = subject.resources.filter((r) => r.type === "textbook");
-    const papers = subject.resources.filter((r) => r.type === "paper");
-    const other = subject.resources.filter((r) => r.type === "other");
+    // Group resources by type dynamically
+    const resourcesByType = subject.resources.reduce((acc, resource) => {
+        const type = resource.type;
+        if (!acc[type]) acc[type] = [];
+        acc[type].push(resource);
+        return acc;
+    }, {} as Record<string, typeof subject.resources>);
+
+    // Order of sections
+    const sectionOrder = ["textbook", "syllabus", "teacher-guide", "paper", "model-paper", "video", "other"];
+
+    const SECTION_TITLES: Record<string, string> = {
+        textbook: "Textbooks",
+        paper: "Past Papers",
+        syllabus: "Syllabuses",
+        "teacher-guide": "Teacher Guides",
+        video: "Video Lessons",
+        "model-paper": "Model Papers",
+        other: "Other Resources"
+    };
 
     return (
         <div className="container mx-auto px-4 py-8">
+            {/* Header */}
             <div className="mb-6">
                 <Button variant="ghost" asChild className="mb-4 pl-0 hover:bg-transparent hover:text-primary">
                     <Link href={`/library/${grade}`}>
@@ -39,62 +55,44 @@ export default async function SubjectPage({
                 </p>
             </div>
 
-            <div className="space-y-8">
-                {/* Textbooks Section */}
-                {textbooks.length > 0 && (
-                    <section>
-                        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                            <FileText className="h-5 w-5" /> Textbooks
-                        </h2>
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {textbooks.map((res) => (
-                                <Card key={res.id}>
-                                    <CardHeader>
-                                        <CardTitle className="text-base">{res.title}</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-xs text-slate-400">
-                                                v{res.version} {res.size ? `• ${res.size}` : ""}
-                                            </span>
-                                            <Button size="sm" asChild>
-                                                <a href={res.url} target="_blank" rel="noopener noreferrer">
-                                                    <Download className="h-4 w-4 mr-2" /> Download
-                                                </a>
-                                            </Button>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
-                    </section>
-                )}
+            <div className="space-y-12">
+                {sectionOrder.map((type) => {
+                    const resources = resourcesByType[type];
+                    if (!resources || resources.length === 0) return null;
 
-                {/* Papers Section */}
-                {papers.length > 0 && (
-                    <section>
-                        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                            <FileText className="h-5 w-5" /> Past Papers
-                        </h2>
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {papers.map((res) => (
-                                <Card key={res.id}>
-                                    <CardHeader>
-                                        <CardTitle className="text-base">{res.title}</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-xs text-slate-400">
-                                                {res.size || "PDF"}
-                                            </span>
-                                            <PDFViewer url={res.url} title={res.title} />
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
-                    </section>
-                )}
+                    const title = SECTION_TITLES[type] || type.charAt(0).toUpperCase() + type.slice(1);
+
+                    return (
+                        <section key={type}>
+                            <h2 className="text-2xl font-semibold mb-6 border-b pb-2 border-slate-100 dark:border-slate-800">
+                                {title}
+                            </h2>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {resources.map((res) => (
+                                    <ResourceCard key={res.id} resource={res} />
+                                ))}
+                            </div>
+                        </section>
+                    );
+                })}
+
+                {/* Handle types not in order */}
+                {Object.keys(resourcesByType).filter(t => !sectionOrder.includes(t)).map((type) => {
+                    const resources = resourcesByType[type];
+                    const title = SECTION_TITLES[type] || type.charAt(0).toUpperCase() + type.slice(1);
+                    return (
+                        <section key={type}>
+                            <h2 className="text-2xl font-semibold mb-6 border-b pb-2 border-slate-100 dark:border-slate-800">
+                                {title}
+                            </h2>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {resources.map((res) => (
+                                    <ResourceCard key={res.id} resource={res} />
+                                ))}
+                            </div>
+                        </section>
+                    )
+                })}
             </div>
         </div>
     );
