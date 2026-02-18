@@ -1,4 +1,4 @@
-import { unstable_cache } from "next/cache";
+// import { unstable_cache } from "next/cache";
 
 // --- Types ---
 
@@ -61,216 +61,84 @@ export interface Registry {
 //     "https://raw.githubusercontent.com/janit/edubase-registry/main/registry.json";
 
 // --- Mock Data ---
+// --- Mock Data Constants ---
+
+const SUBJECTS_PRIMARY: Subject[] = [
+    { id: "sinhala", name: "Sinhala", medium: "sinhala", category: "languages", resources: [] },
+    { id: "buddhism", name: "Buddhism", medium: "sinhala", category: "religion", resources: [] },
+    { id: "environment", name: "Environment", medium: "sinhala", category: "core", resources: [] },
+    { id: "mathematics", name: "Mathematics", medium: "sinhala", category: "core", resources: [] },
+    { id: "english", name: "English", medium: "english", category: "languages", resources: [] },
+    { id: "islam", name: "Islam", medium: "sinhala", category: "religion", resources: [] },
+    { id: "christianity", name: "Christianity", medium: "sinhala", category: "religion", resources: [] },
+];
+
+const SUBJECTS_JUNIOR: Subject[] = [
+    { id: "mathematics", name: "Mathematics", medium: "sinhala", category: "core", resources: [] },
+    { id: "science", name: "Science", medium: "sinhala", category: "core", resources: [] },
+    { id: "english", name: "English Language", medium: "english", category: "languages", resources: [] },
+    { id: "sinhala", name: "Sinhala", medium: "sinhala", category: "languages", resources: [] },
+    { id: "buddhism", name: "Buddhism", medium: "sinhala", category: "religion", resources: [] },
+    { id: "history", name: "History", medium: "sinhala", category: "core", resources: [] },
+    { id: "geography", name: "Geography", medium: "sinhala", category: "other", resources: [] },
+    { id: "civics", name: "Civic Education", medium: "sinhala", category: "other", resources: [] },
+    { id: "ict", name: "ICT", medium: "english", category: "other", resources: [] },
+    { id: "tamil", name: "Tamil", medium: "tamil", category: "languages", resources: [] },
+    { id: "health", name: "Health & Physical Education", medium: "sinhala", category: "other", resources: [] },
+    { id: "pts", name: "Practical & Technical Skills (PTS)", medium: "sinhala", category: "other", resources: [] },
+    { id: "art", name: "Art", medium: "sinhala", category: "aesthetics", resources: [] },
+    { id: "western-music", name: "Western Music", medium: "english", category: "aesthetics", resources: [] },
+    { id: "eastern-music", name: "Eastern Music", medium: "sinhala", category: "aesthetics", resources: [] },
+    { id: "dancing", name: "Dancing", medium: "sinhala", category: "aesthetics", resources: [] },
+    { id: "drama", name: "Drama", medium: "sinhala", category: "aesthetics", resources: [] },
+    { id: "christianity", name: "Christianity", medium: "sinhala", category: "religion", resources: [] },
+    { id: "islam", name: "Islam", medium: "sinhala", category: "religion", resources: [] },
+];
+
+const SUBJECTS_OL: Subject[] = [
+    { id: "mathematics", name: "Mathematics", medium: "sinhala", category: "core", resources: [] },
+    { id: "science", name: "Science", medium: "sinhala", category: "core", resources: [] },
+    { id: "english", name: "English Language", medium: "english", category: "languages", resources: [] },
+    { id: "sinhala", name: "Sinhala", medium: "sinhala", category: "languages", resources: [] },
+    { id: "buddhism", name: "Buddhism", medium: "sinhala", category: "religion", resources: [] },
+    { id: "history", name: "History", medium: "sinhala", category: "core", resources: [] },
+    { id: "geography", name: "Geography", medium: "sinhala", category: "other", resources: [] },
+    { id: "civics", name: "Civic Education", medium: "sinhala", category: "other", resources: [] },
+    { id: "ict", name: "ICT", medium: "english", category: "other", resources: [] },
+    { id: "health", name: "Health & Physical Education", medium: "sinhala", category: "other", resources: [] },
+    { id: "art", name: "Art", medium: "sinhala", category: "aesthetics", resources: [] },
+    { id: "western-music", name: "Western Music", medium: "english", category: "aesthetics", resources: [] },
+    { id: "eastern-music", name: "Eastern Music", medium: "sinhala", category: "aesthetics", resources: [] },
+    { id: "dancing", name: "Dancing", medium: "sinhala", category: "aesthetics", resources: [] },
+    { id: "drama", name: "Drama", medium: "sinhala", category: "aesthetics", resources: [] },
+    { id: "christianity", name: "Christianity", medium: "sinhala", category: "religion", resources: [] },
+    { id: "islam", name: "Islam", medium: "sinhala", category: "religion", resources: [] },
+    { id: "entrepreneurship", name: "Entrepreneurial Studies", medium: "sinhala", category: "other", resources: [] },
+    { id: "business", name: "Business Studies & Accounting", medium: "sinhala", category: "other", resources: [] },
+    { id: "tamil", name: "Tamil", medium: "tamil", category: "languages", resources: [] },
+    { id: "sinhala-lit", name: "Sinhala Literature", medium: "sinhala", category: "languages", resources: [] },
+    { id: "english-lit", name: "English Literature", medium: "english", category: "languages", resources: [] },
+];
+
 const MOCK_REGISTRY: Registry = {
-    meta: { lastUpdated: "2024-02-18", version: "1.1.0" },
+    meta: { lastUpdated: "2024-02-18", version: "1.2.0" },
     grades: [
         // --- Primary (Grades 1-5) ---
-        {
-            id: "grade-1",
-            name: "Grade 1",
-            subjects: [
-                {
-                    id: "mathematics",
-                    name: "Mathematics",
-                    medium: "sinhala",
-                    category: "core",
-                    resources: [
-                        {
-                            id: "math-textbook-g1",
-                            title: "Mathematics Textbook",
-                            type: "textbook",
-                            url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-                            size: "8MB",
-                            thumbnailUrl: "/images/placeholders/math-g1.jpg",
-                        },
-                        {
-                            id: "math-video-g1-shapes",
-                            title: "Learning Shapes - Fun Video",
-                            type: "video",
-                            url: "https://www.youtube.com/watch?v=dummy",
-                            duration: "15:00",
-                            thumbnailUrl: "/images/placeholders/video-shapes.jpg",
-                        },
-                    ],
-                },
-                { id: "sinhala", name: "Sinhala", medium: "sinhala", category: "languages", resources: [] },
-                { id: "env-studies", name: "Environmental Studies", medium: "sinhala", category: "core", resources: [] },
-            ],
-        },
-        {
-            id: "grade-2",
-            name: "Grade 2",
-            subjects: [
-                { id: "mathematics", name: "Mathematics", medium: "sinhala", category: "core", resources: [] },
-                { id: "sinhala", name: "Sinhala", medium: "sinhala", category: "languages", resources: [] },
-                { id: "env-studies", name: "Environmental Studies", medium: "sinhala", category: "core", resources: [] },
-            ],
-        },
-        {
-            id: "grade-3",
-            name: "Grade 3",
-            subjects: [
-                { id: "mathematics", name: "Mathematics", medium: "sinhala", category: "core", resources: [] },
-                { id: "sinhala", name: "Sinhala", medium: "sinhala", category: "languages", resources: [] },
-                { id: "env-studies", name: "Environmental Studies", medium: "sinhala", category: "core", resources: [] },
-            ],
-        },
-        {
-            id: "grade-4",
-            name: "Grade 4",
-            subjects: [
-                { id: "mathematics", name: "Mathematics", medium: "sinhala", category: "core", resources: [] },
-                { id: "sinhala", name: "Sinhala", medium: "sinhala", category: "languages", resources: [] },
-                { id: "env-studies", name: "Environmental Studies", medium: "sinhala", category: "core", resources: [] },
-            ],
-        },
-        {
-            id: "grade-5",
-            name: "Grade 5 (Scholarship)",
-            subjects: [
-                {
-                    id: "scholarship-prep",
-                    name: "Scholarship Preparation",
-                    medium: "sinhala",
-                    category: "core",
-                    resources: [
-                        {
-                            id: "schol-paper-2023",
-                            title: "2023 Scholarship Exam Paper 1",
-                            type: "paper",
-                            url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-                            size: "3MB",
-                        },
-                        {
-                            id: "schol-model-paper",
-                            title: "Model Paper Collection",
-                            type: "model-paper",
-                            url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-                            size: "12MB",
-                            author: "Ministry of Education",
-                        },
-                    ],
-                },
-            ],
-        },
+        { id: "grade-1", name: "Grade 1", subjects: SUBJECTS_PRIMARY },
+        { id: "grade-2", name: "Grade 2", subjects: SUBJECTS_PRIMARY },
+        { id: "grade-3", name: "Grade 3", subjects: SUBJECTS_PRIMARY },
+        { id: "grade-4", name: "Grade 4", subjects: SUBJECTS_PRIMARY },
+        { id: "grade-5", name: "Grade 5 (Scholarship)", subjects: SUBJECTS_PRIMARY },
 
         // --- Junior Secondary (Grades 6-9) ---
-        {
-            id: "grade-6",
-            name: "Grade 6",
-            subjects: [
-                {
-                    id: "mathematics",
-                    name: "Mathematics",
-                    medium: "sinhala",
-                    category: "core",
-                    resources: [
-                        {
-                            id: "math-textbook-g6",
-                            title: "Mathematics Textbook Part 1",
-                            type: "textbook",
-                            url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-                            version: "1.0",
-                            size: "15MB",
-                        },
-                        {
-                            id: "math-syllabus-g6",
-                            title: "Grade 6 Mathematics Syllabus",
-                            type: "syllabus",
-                            url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-                        },
-                    ],
-                },
-                { id: "science", name: "Science", medium: "sinhala", category: "core", resources: [] },
-                { id: "sinhala", name: "Sinhala", medium: "sinhala", category: "languages", resources: [] },
-                { id: "english", name: "English", medium: "english", category: "languages", resources: [] },
-                { id: "history", name: "History", medium: "sinhala", category: "core", resources: [] },
-                { id: "buddhism", name: "Buddhism", medium: "sinhala", category: "religion", resources: [] },
-            ],
-        },
-        {
-            id: "grade-7",
-            name: "Grade 7",
-            subjects: [
-                { id: "mathematics", name: "Mathematics", medium: "sinhala", category: "core", resources: [] },
-                { id: "science", name: "Science", medium: "sinhala", category: "core", resources: [] },
-                { id: "sinhala", name: "Sinhala", medium: "sinhala", category: "languages", resources: [] },
-                { id: "english", name: "English", medium: "english", category: "languages", resources: [] },
-                { id: "history", name: "History", medium: "sinhala", category: "core", resources: [] },
-                { id: "buddhism", name: "Buddhism", medium: "sinhala", category: "religion", resources: [] },
-            ],
-        },
-        {
-            id: "grade-8",
-            name: "Grade 8",
-            subjects: [
-                { id: "mathematics", name: "Mathematics", medium: "sinhala", category: "core", resources: [] },
-                { id: "science", name: "Science", medium: "sinhala", category: "core", resources: [] },
-                { id: "sinhala", name: "Sinhala", medium: "sinhala", category: "languages", resources: [] },
-                { id: "english", name: "English", medium: "english", category: "languages", resources: [] },
-                { id: "history", name: "History", medium: "sinhala", category: "core", resources: [] },
-                { id: "buddhism", name: "Buddhism", medium: "sinhala", category: "religion", resources: [] },
-            ],
-        },
-        {
-            id: "grade-9",
-            name: "Grade 9",
-            subjects: [
-                { id: "mathematics", name: "Mathematics", medium: "sinhala", category: "core", resources: [] },
-                { id: "science", name: "Science", medium: "sinhala", category: "core", resources: [] },
-                { id: "sinhala", name: "Sinhala", medium: "sinhala", category: "languages", resources: [] },
-                { id: "english", name: "English", medium: "english", category: "languages", resources: [] },
-                { id: "history", name: "History", medium: "sinhala", category: "core", resources: [] },
-                { id: "buddhism", name: "Buddhism", medium: "sinhala", category: "religion", resources: [] },
-            ],
-        },
+        { id: "grade-6", name: "Grade 6", subjects: SUBJECTS_JUNIOR },
+        { id: "grade-7", name: "Grade 7", subjects: SUBJECTS_JUNIOR },
+        { id: "grade-8", name: "Grade 8", subjects: SUBJECTS_JUNIOR },
+        { id: "grade-9", name: "Grade 9", subjects: SUBJECTS_JUNIOR },
 
         // --- Senior Secondary (Grades 10-11) ---
-        {
-            id: "grade-10",
-            name: "Grade 10",
-            subjects: [
-                { id: "mathematics", name: "Mathematics", medium: "sinhala", category: "core", resources: [] },
-                { id: "science", name: "Science", medium: "sinhala", category: "core", resources: [] },
-                { id: "sinhala", name: "Sinhala", medium: "sinhala", category: "languages", resources: [] },
-                { id: "english", name: "English", medium: "english", category: "languages", resources: [] },
-                { id: "history", name: "History", medium: "sinhala", category: "core", resources: [] },
-                { id: "buddhism", name: "Buddhism", medium: "sinhala", category: "religion", resources: [] },
-            ],
-        },
-        {
-            id: "grade-11",
-            name: "Grade 11",
-            subjects: [
-                {
-                    id: "mathematics",
-                    name: "Mathematics",
-                    medium: "english",
-                    category: "core",
-                    resources: [
-                        {
-                            id: "math-paper-2023",
-                            title: "2023 1st Term Paper",
-                            type: "paper",
-                            url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-                            version: "1.0",
-                            size: "2MB"
-                        },
-                        {
-                            id: "math-teacher-guide-11",
-                            title: "Teacher's Guide - Mathematics",
-                            type: "teacher-guide",
-                            url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-                        }
-                    ]
-                },
-                { id: "science", name: "Science", medium: "sinhala", category: "core", resources: [] },
-                { id: "sinhala", name: "Sinhala", medium: "sinhala", category: "languages", resources: [] },
-                { id: "english", name: "English", medium: "english", category: "languages", resources: [] },
-                { id: "history", name: "History", medium: "sinhala", category: "core", resources: [] },
-                { id: "buddhism", name: "Buddhism", medium: "sinhala", category: "religion", resources: [] },
-            ],
-        },
+        { id: "grade-10", name: "Grade 10", subjects: SUBJECTS_OL },
+        { id: "grade-11", name: "Grade 11", subjects: SUBJECTS_OL },
 
         // --- Collegiate (Grades 12-13) ---
         {
