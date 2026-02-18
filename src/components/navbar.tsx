@@ -20,22 +20,22 @@ export async function Navbar() {
                             href="/#grades"
                             className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
                         >
-                            Grades
+                            Library
                         </Link>
                         <Link
-                            href="/exams/ol"
+                            href="/#exams"
                             className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
                         >
-                            O/L
+                            Exams
                         </Link>
                         <Link
-                            href="/#al"
+                            href="/contribute"
                             className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
                         >
-                            A/L
+                            Contribute
                         </Link>
                     </nav>
-                    <div className="w-full max-w-sm">
+                    <div className="w-full max-w-sm flex items-center gap-2">
                         <SearchPalette registry={registry} />
                     </div>
                 </div>

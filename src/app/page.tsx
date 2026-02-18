@@ -27,7 +27,7 @@ export default async function Home() {
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-slate-50 mb-6">
             EduBase <br />
             <span className="text-primary text-3xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
-              Sri Lanka's Open Education Platform
+              Sri Lanka&apos;s Open Education Platform
             </span>
           </h1>
           <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10">
@@ -39,7 +39,7 @@ export default async function Home() {
             <div className="p-1 bg-gradient-to-r from-primary/20 via-blue-500/20 to-primary/20 rounded-lg backdrop-blur-sm">
               <SearchPalette registry={registry} />
             </div>
-            <p className="text-sm text-slate-500 mt-2">Try searching for "Grade 5 Scholarship" or "Combined Maths"</p>
+            <p className="text-sm text-slate-500 mt-2">Try searching for &quot;Grade 5 Scholarship&quot; or &quot;Combined Maths&quot;</p>
           </div>
 
           <div className="flex justify-center gap-4">
