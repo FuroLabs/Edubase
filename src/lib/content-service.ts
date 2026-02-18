@@ -15,6 +15,8 @@ export interface Subject {
     id: string;
     name: string; // e.g., "Mathematics"
     medium: "sinhala" | "english" | "tamil";
+    // stream?: "physical" | "bio" | "commerce" | "arts" | "tech";
+    streams?: string[];
     resources: Resource[];
 }
 
@@ -149,6 +151,56 @@ const MOCK_REGISTRY: Registry = {
                 { id: "history", name: "History", medium: "sinhala", resources: [] },
                 { id: "buddhism", name: "Buddhism", medium: "sinhala", resources: [] },
             ],
+        },
+        {
+            id: "grade-12",
+            name: "Grade 12",
+            subjects: [
+                // Physical Science & Bio Science
+                { id: "combined-maths", name: "Combined Mathematics", medium: "sinhala", streams: ["physical"], resources: [] },
+                { id: "biology", name: "Biology", medium: "sinhala", streams: ["bio"], resources: [] },
+                { id: "physics", name: "Physics", medium: "sinhala", streams: ["physical", "bio"], resources: [] },
+                { id: "chemistry", name: "Chemistry", medium: "sinhala", streams: ["physical", "bio"], resources: [] },
+
+                // Commerce
+                { id: "accounting", name: "Accounting", medium: "sinhala", streams: ["commerce"], resources: [] },
+                { id: "business-studies", name: "Business Studies", medium: "sinhala", streams: ["commerce"], resources: [] },
+                { id: "economics", name: "Economics", medium: "sinhala", streams: ["commerce"], resources: [] },
+
+                // Arts
+                { id: "sinhala", name: "Sinhala", medium: "sinhala", streams: ["arts"], resources: [] },
+                { id: "political-science", name: "Political Science", medium: "sinhala", streams: ["arts"], resources: [] },
+                { id: "geography", name: "Geography", medium: "sinhala", streams: ["arts"], resources: [] },
+
+                // Technology
+                { id: "engineering-tech", name: "Engineering Technology", medium: "sinhala", streams: ["tech"], resources: [] },
+                { id: "science-tech", name: "Science for Technology", medium: "sinhala", streams: ["tech"], resources: [] },
+            ]
+        },
+        {
+            id: "grade-13",
+            name: "Grade 13",
+            subjects: [
+                // Physical Science & Bio Science
+                { id: "combined-maths", name: "Combined Mathematics", medium: "sinhala", streams: ["physical"], resources: [] },
+                { id: "biology", name: "Biology", medium: "sinhala", streams: ["bio"], resources: [] },
+                { id: "physics", name: "Physics", medium: "sinhala", streams: ["physical", "bio"], resources: [] },
+                { id: "chemistry", name: "Chemistry", medium: "sinhala", streams: ["physical", "bio"], resources: [] },
+
+                // Commerce
+                { id: "accounting", name: "Accounting", medium: "sinhala", streams: ["commerce"], resources: [] },
+                { id: "business-studies", name: "Business Studies", medium: "sinhala", streams: ["commerce"], resources: [] },
+                { id: "economics", name: "Economics", medium: "sinhala", streams: ["commerce"], resources: [] },
+
+                // Arts
+                { id: "sinhala", name: "Sinhala", medium: "sinhala", streams: ["arts"], resources: [] },
+                { id: "political-science", name: "Political Science", medium: "sinhala", streams: ["arts"], resources: [] },
+                { id: "geography", name: "Geography", medium: "sinhala", streams: ["arts"], resources: [] },
+
+                // Technology
+                { id: "engineering-tech", name: "Engineering Technology", medium: "sinhala", streams: ["tech"], resources: [] },
+                { id: "science-tech", name: "Science for Technology", medium: "sinhala", streams: ["tech"], resources: [] },
+            ]
         }
     ],
     exams: [
@@ -182,35 +234,22 @@ const MOCK_REGISTRY: Registry = {
  * Fetches the registry from the remote GitHub URL.
  * Cached for 1 hour by default.
  */
-export const getRegistry = unstable_cache(
-    async (): Promise<Registry | null> => {
-        try {
-            // For demonstration, return Mock Data if fetch fails or always return validation of loop
-            // In production, we would rely on the fetch.
-            // To test "Git CMS", we try fetch, catch, and return mock.
+// export const getRegistry = unstable_cache(
+//     async (): Promise<Registry | null> => {
+//         try {
+//             return MOCK_REGISTRY;
+//         } catch (error) {
+//             console.error("Error fetching registry:", error);
+//             return MOCK_REGISTRY;
+//         }
+//     },
+//     ["registry-data"],
+//     { revalidate: 3600, tags: ["registry"] }
+// );
 
-            // try {
-            //     const res = await fetch(REGISTRY_URL, {
-            //         next: { revalidate: 3600 },
-            //     });
-            //     if (res.ok) {
-            //         return (await res.json()) as Registry;
-            //     }
-            // } catch (e) {
-            //     // Ignore fetch error
-            // }
-
-            // Fallback to mock data
-            return MOCK_REGISTRY;
-
-        } catch (error) {
-            console.error("Error fetching registry:", error);
-            return MOCK_REGISTRY;
-        }
-    },
-    ["registry-data"],
-    { revalidate: 3600, tags: ["registry"] }
-);
+export const getRegistry = async (): Promise<Registry | null> => {
+    return MOCK_REGISTRY;
+};
 
 /**
  * Helper to get data for a specific grade
